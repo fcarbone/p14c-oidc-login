@@ -1,0 +1,37 @@
+ping-config:
+   server: <<replace>>
+   env-id: <<replace>>
+   oidc-client-id: <<replace>>
+   oidc-client-secret: <<replace>>
+   
+   profile-page: https://apps.pingone.${ping-config.server}/${ping-config.env-id}/myaccount/
+   
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.pingidentity.oidclogin: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+    
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          ping:
+            client-id: ${ping-config.oidc-client-id}
+            client-secret: ${ping-config.oidc-client-secret}
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          ping:
+            issuer-uri: https://auth.pingone.${ping-config.server}/${ping-config.env-id}/as
+
+
